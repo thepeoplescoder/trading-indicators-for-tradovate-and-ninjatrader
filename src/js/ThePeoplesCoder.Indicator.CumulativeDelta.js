@@ -10,10 +10,10 @@
  * @author thepeoplescoder
  */
 
-const tools = {
+const tools = Object.freeze({
     predef: require("./tools/predef"),
     meta:   require("./tools/meta"),
-};
+});
 
 class CumulativeDelta {
     init() {

@@ -7,10 +7,10 @@
  * @author thepeoplescoder
  */
 
-const tools = {
+const tools = Object.freeze({
     predef: require("./tools/predef"),
     EMA:    require("./tools/EMA"),
-};
+});
 
 class EMA {
     init() {
