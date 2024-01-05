@@ -12,51 +12,58 @@
 
 const tools = Object.freeze({
     predef: require("./tools/predef"),
-    meta:   require("./tools/meta"),
+    meta: require("./tools/meta"),
 });
 
 class CumulativeDelta {
-    init() {
+    // initialize lastClose to 0
+    constructor() {
         this.lastClose = 0;
     }
 
+    //Reset lastClose to 0
+    initialize() {
+        this.lastClose = 0;
+    }
+
+    // Calculate the cumulative delta, open, and close values
     map(d, index, history) {
-        const doc = this.__getDeltaOpenClose(d);
+        const deltaOpenClose = this.__getDeltaOpenClose(d);
+        const prevd = (index > 0) ? history.prior() : d;
+        const range = Math.abs(deltaOpenClose.open) > Math.abs(deltaOpenClose.close) ? deltaOpenClose.open : deltaOpenClose.close;
 
-        const prevd = (index > 0)
-            ? history.prior() : d;
+        // Update lastClose with the close value
+        this.lastClose = deltaOpenClose.close;
 
-        const range = (Math.abs(doc.open) > Math.abs(doc.close))
-            ? doc.open : doc.close;
-
-        this.lastClose = doc.close;
-
+        // Return the result and corresponding visual
         return this.__getResultAndCorrespondingVisual({
-            prevd, d, result: { ...doc, value: range },
+            prevd,
+            d,
+            result: { ...deltaOpenClose, value: range },
         });
     }
 
+    // Calculate delta, open, and close values based on input data
     __getDeltaOpenClose(d) {
         const delta = d.offerVolume() - d.bidVolume();
-        const open  = this.lastClose;
+        const open = this.lastClose;
         const close = open + delta;
         return { delta, open, close };
     }
 
+    // Determine direction (up, down, or neutral)
     __getResultAndCorrespondingVisual({ prevd, d, result }) {
         const direction = this.__getDirection(prevd, d);
 
-        const category = (() => {
-            if      (direction.isUp)   { return "up";      }
-            else if (direction.isDown) { return "down";    }
-            else                       { return "neutral"; }
-        })();
+        const category = direction.isUp ? "up" : direction.isDown ? "down" : "neutral";
 
+        // Rename open and close keys based on direction
         ["open", "close"].forEach(e => {
-            const KEY   = [category, '_', e].join('');
+            const KEY = [category, '_', e].join('');
             result[KEY] = result[e];
         });
 
+        // Set 'up' flag if direction is up or down
         if (direction.isUp || direction.isDown) {
             result.up = direction.isUp;
         }
@@ -64,20 +71,21 @@ class CumulativeDelta {
         return result;
     }
 
+    // Determine direction based on close values
     __getDirection(prevd, d) {
         const close = d.close();
         return this.props.strongUpDown ? {
-            isUp:   close > prevd.high(),
+            isUp: close > prevd.high(),
             isDown: close < prevd.low(),
         } : {
-            isUp:   close > d.open(),
+            isUp: close > d.open(),
             isDown: close < d.open(),
         };
     }
 }
 
 module.exports = {
-    name:       "ThePeoplesCoder.CumulativeDelta",
+    name: "ThePeoplesCoder.CumulativeDelta",
     calculator: CumulativeDelta,
 
     description: "Cumulative Delta",
@@ -86,10 +94,10 @@ module.exports = {
         strongUpDown: tools.predef.paramSpecs.bool(true)
     },
 
-    inputType:  tools.meta.InputType.BARS,
+    inputType: tools.meta.InputType.BARS,
     areaChoice: tools.meta.AreaChoice.NEW,
 
-    scaler:  tools.predef.scalers.multiPath(["open", "close"]),
+    scaler: tools.predef.scalers.multiPath(["open", "close"]),
     plotter: tools.predef.plotters.cumulative,
 
     plots: {
