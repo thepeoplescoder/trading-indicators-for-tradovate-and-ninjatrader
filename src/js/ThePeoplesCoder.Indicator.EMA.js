@@ -7,30 +7,40 @@
  * @author thepeoplescoder
  */
 
-const tools = Object.freeze({
-    predef: require("./tools/predef"),
-    EMA:    require("./tools/EMA"),
-});
+// Import necessary tools from the tools module
+const { predef, EMA: emaTools } = require("./tools");
 
-class EMA {
-    init() {
-        this.ema = tools.EMA(this.props.period);
-    }
-    
-    map(d, index) {
-        return this.ema(d.value());
+// Define a class for Exponential Moving Average calculation
+class ExponentialMovingAverage {
+    constructor(props) {
+        // Initialize necessary properties
+        this.period = props.period;
+        // Initialize the EMA calculation tool with the specified period
+        this.ema = emaTools.EMA(this.period);
     }
 
+    // Method to calculate the EMA for a given value
+    calculateEMA(value) {
+        return this.ema(value);
+    }
+
+    // Map function to calculate EMA on the provided data
+    map(data) {
+        return this.calculateEMA(data.value());
+    }
+
+    // Filter function to determine if enough values are available for EMA calculation
     filter(_, index) {
-        return index >= this.props.period;      // keep value if we have enough values for an EMA calculation
+        return index >= this.period; // Keep values if enough for EMA calculation
     }
 }
 
+// Export module with EMA details, parameters, and styles
 module.exports = {
-    name: "ThePeoplesCoder.Indicator.EMA",
-    calculator: EMA,
+    name: "ThePeoplesCoder.Indicator.ExponentialMovingAverage",
+    calculator: ExponentialMovingAverage,
     params: {
-        period: tools.predef.paramSpecs.period(14)
+        period: predef.paramSpecs.period(14)
     },
-    schemeStyles: tools.predef.styles.solidLine("#95f57a")
+    schemeStyles: predef.styles.solidLine("#95f57a")
 };
