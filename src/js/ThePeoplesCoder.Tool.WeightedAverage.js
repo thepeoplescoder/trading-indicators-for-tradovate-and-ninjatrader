@@ -12,8 +12,8 @@ function WeightedAverage() {
     };
 
     weightedAverage.push = ({ weight, value }) => {
-        if (!Number.isFinite(weight) || weight < 0) {
-            throw new TypeError("'weight' must be a nonnegative number.");
+        if (!Number.isFinite(weight)) {
+            throw new TypeError("'weight' must be a number.");
         }
 
         if (!Number.isFinite(value)) {
@@ -25,14 +25,15 @@ function WeightedAverage() {
         state.sumOfWeights            += weight;
         state.sumOfValuesTimesWeights += weight * value;
 
-        state.currentWeightedAverage = (state.sumOfWeights != 0)
-            ? state.sumOfValuesTimesWeights / state.sumOfWeights
-            : 0;
-
         return weightedAverage.avg();
     };
 
-    weightedAverage.avg = () => weightedAverage.state.currentWeightedAverage;
+    weightedAverage.avg = () => {
+        const state = weightedAverage.state;
+        return (state.sumOfWeights != 0)
+            ? state.sumOfValuesTimesWeights / state.sumOfWeights
+            : 0;
+    };
 
     weightedAverage.reset();
 

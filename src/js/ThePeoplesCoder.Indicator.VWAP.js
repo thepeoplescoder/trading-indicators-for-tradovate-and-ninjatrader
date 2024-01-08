@@ -7,7 +7,8 @@
  */
 
 const tools = Object.freeze({
-    predef: require("./tools/predef"),
+    predef:       require("./tools/predef"),
+    typicalPrice: require("./tools/typicalPrice"),
 });
 
 // bootstrapping code to use my libraries.
@@ -43,7 +44,7 @@ class VWAP {
         this.weightedAverage = WeightedAverage();
     }
     map(d) {
-        return this.weightedAverage({ weight: d.volume(), value: d.value() });
+        return this.weightedAverage({ weight: d.volume(), value: tools.typicalPrice(d) });
     }
 }
 
