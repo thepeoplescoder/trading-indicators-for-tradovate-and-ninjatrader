@@ -37,7 +37,7 @@ class VWAP {
     init() {
         this.weightedAverage = WeightedAverage();
     }
-    map(d, index) {
+    map(d) {
         return this.weightedAverage({ weight: d.volume(), value: d.value() });
     }
 }
