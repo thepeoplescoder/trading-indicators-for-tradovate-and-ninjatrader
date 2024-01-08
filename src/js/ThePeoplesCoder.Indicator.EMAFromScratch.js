@@ -45,6 +45,10 @@ class EMAFromScratch {
 module.exports = {
     name: "ThePeoplesCoder.EMAFromScratch",
     calculator: EMAFromScratch,
+
+    description: "Exponential Moving Average (without tools)",
+    tags: ["com.thepeoplescoder",],
+
     params: {
         period: predef.paramSpecs.period(14)
     },

@@ -27,8 +27,12 @@ class EMA {
 }
 
 module.exports = {
-    name: "ThePeoplesCoder.Indicator.EMA",
+    name: "ThePeoplesCoder.EMA",
     calculator: EMA,
+
+    description: "Exponential Moving Average",
+    tags: ["com.thepeoplescoder",],
+
     params: {
         period: tools.predef.paramSpecs.period(14)
     },

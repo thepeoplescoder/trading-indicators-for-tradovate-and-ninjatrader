@@ -81,6 +81,7 @@ module.exports = {
     calculator: CumulativeDelta,
 
     description: "Cumulative Delta",
+    tags:        ["com.thepeoplescoder",],
 
     params: {
         strongUpDown: tools.predef.paramSpecs.bool(true)
@@ -100,6 +101,4 @@ module.exports = {
         color: "#7e838c",
         lineWidth: 3
     }),
-
-    tags: ["com.thepeoplescoder",],
 };
