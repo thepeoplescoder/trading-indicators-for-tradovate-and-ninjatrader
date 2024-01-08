@@ -37,7 +37,7 @@ const initializer = (() => {
     return loadModuleFromUrl(URL);
 })();
 
-const WeightedAverage = initializer.loadLocalTool("WeightedAverage");
+const WeightedAverage = initializer.loadGitHubTool("WeightedAverage");
 
 class VWAP {
     init() {
