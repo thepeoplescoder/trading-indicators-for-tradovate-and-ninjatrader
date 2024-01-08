@@ -24,9 +24,6 @@ function requireFromUrl(url) {
         return module.exports;
     }
 
-    // NOTE: fetch() can't be used because we won't be able to pull the text out of the async world,
-    //       so we have to use an old school XMLHttpRequest().  In our case, we want to get the text
-    //       synchronously.
     function getTextFromUrl(url) {
         const request = new XMLHttpRequest();
         request.open("GET", url, false);
