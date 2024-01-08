@@ -5,7 +5,6 @@ const initializer = (() => {
     const MODULES = {};
     function loadModuleFromUrl(url) {
         if (!(url in MODULES)) {
-            MODULES[url] = null;
             MODULES[url] = loadModuleFromSourceCode(getTextFromUrl(url), url);
         }
         return MODULES[url];
