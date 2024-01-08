@@ -10,68 +10,37 @@ const tools = Object.freeze({
     predef: require("./tools/predef"),
 });
 
-const WeightedAverage = loadCommonJsModuleFromUrl([
-    "https://raw.githubusercontent.com/thepeoplescoder",
-    "/trading-indicators-for-tradovate-and-ninjatrader",
-    "/main",
-    "/src/js/ThePeoplesCoder.Tool.WeightedAverage.js",
-].join(''));
+const REPOSITORY  = "https://raw.githubusercontent.com/thepeoplescoder/trading-indicators-for-tradovate-and-ninjatrader";
+const BRANCH_ROOT = REPOSITORY + "/main";
 
+const WeightedAverage = requireFromUrl(BRANCH_ROOT + "/src/js/ThePeoplesCoder.Tool.WeightedAverage.js");
 
-function loadCommonJsModuleFromUrl(url) {
-    return loadCommonJsModuleFromSourceCode(loadSourceCodeFromUrl(url));
-}
+function requireFromUrl(url) {
+    return requireFromSourceCode(getTextFromUrl(url));
 
-function loadSourceCodeFromUrl(url) {
-    console.log("Syncrhonously loading source code from URL: " + url);
-    return theOldWay();
+    function requireFromSourceCode(sourceCode) {
+        const module = {exports: {}};
+        (new Function("module", "exports", sourceCode))(module, module.exports);
+        return module.exports;
+    }
 
-    function theOldWay() {
-        console.log("Doing it the old way.");
-
+    // NOTE: fetch() can't be used because we won't be able to pull the text out of the async world,
+    //       so we have to use an old school XMLHttpRequest().  In our case, we want to get the text
+    //       synchronously.
+    function getTextFromUrl(url) {
         const request = new XMLHttpRequest();
-        const result  = {};
-        
-        request.addEventListener("load",
-            () => (result.sourceCode = request.responseText));
-            
         request.open("GET", url, false);
         request.send();
-        
-        return result.sourceCode;
+        return request.responseText;
     }
-
-    function theNewWay() {
-        const result = {};
-        (async () => {
-            console.log("Doing it the new way.");
-            const response    = await fetch(url);
-            result.sourceCode = await response.text();
-        })();
-        console.log("WHY DOES THIS NOT WORK??????");
-        console.log(JSON.stringify(result));
-        return result.sourceCode;
-    }
-}
-
-function loadCommonJsModuleFromSourceCode(src) {
-    console.log("Source code loaded:\n" + src);
-
-    const module = {exports: {}};
-    (new Function("module", "exports", src))(module, module.exports);
-    return module.exports;
 }
 
 class VWAP {
     init() {
         this.weightedAverage = WeightedAverage();
     }
-
     map(d, index) {
-        const weight = d.volume();
-        const value  = d.value();
-
-        return this.weightedAverage({ weight, value });
+        return this.weightedAverage({ weight: d.volume(), value: d.value() });
     }
 }
 
