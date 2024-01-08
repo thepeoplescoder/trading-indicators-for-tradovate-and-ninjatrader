@@ -6,15 +6,6 @@
  * @author thepeoplescoder
  */
 
-const tools = Object.freeze({
-    predef: require("./tools/predef"),
-});
-
-const REPOSITORY  = "https://raw.githubusercontent.com/thepeoplescoder/trading-indicators-for-tradovate-and-ninjatrader";
-const BRANCH_ROOT = REPOSITORY + "/main";
-
-const WeightedAverage = requireFromUrl(BRANCH_ROOT + "/src/js/ThePeoplesCoder.Tool.WeightedAverage.js");
-
 function requireFromUrl(url) {
     return requireFromSourceCode(getTextFromUrl(url));
 
@@ -23,14 +14,23 @@ function requireFromUrl(url) {
         (new Function("module", "exports", sourceCode))(module, module.exports);
         return module.exports;
     }
-
     function getTextFromUrl(url) {
+        console.log("Loading text from URL: " + url);
         const request = new XMLHttpRequest();
         request.open("GET", url, false);
         request.send();
         return request.responseText;
     }
 }
+
+const tools = Object.freeze({
+    predef: require("./tools/predef"),
+});
+
+const REPOSITORY  = "https://raw.githubusercontent.com/thepeoplescoder/trading-indicators-for-tradovate-and-ninjatrader";
+const BRANCH_ROOT = REPOSITORY + "/main";
+
+const WeightedAverage = requireFromUrl(BRANCH_ROOT + "/src/js/ThePeoplesCoder.Tool.WeightedAverage.js");
 
 class VWAP {
     init() {
