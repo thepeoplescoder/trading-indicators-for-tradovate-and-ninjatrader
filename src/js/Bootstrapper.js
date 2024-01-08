@@ -11,7 +11,7 @@ const initializer = (() => {
         return MODULES[url];
     }
     function loadModuleFromSourceCode(sourceCode, url) {
-        const module  = {loadModuleFromSourceCode, getTextFromUrl, loadModuleFromUrl, url, exports: {}};
+        const module  = {loadModuleFromUrl, loadModuleFromSourceCode, getTextFromUrl, url, exports: {}};
         (new Function("module", "exports", sourceCode))(module, module.exports);
         return module.exports;
     }
