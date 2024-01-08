@@ -11,7 +11,8 @@ const tools = Object.freeze({
 });
 
 const WeightedAverage = loadCommonJsModuleFromUrl([
-    "https://raw.githubusercontent.com/thepeoplescoder/trading-indicators-for-tradovate-and-ninjatrader",
+    "https://raw.githubusercontent.com/thepeoplescoder",
+    "/trading-indicators-for-tradovate-and-ninjatrader",
     "/main",
     "/src/js/ThePeoplesCoder.Tool.WeightedAverage.js",
 ].join(''));
