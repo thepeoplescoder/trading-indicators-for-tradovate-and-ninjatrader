@@ -6,15 +6,16 @@
  * @author thepeoplescoder
  */
 
-function requireFromUrl(url) {
-    return requireFromSourceCode(getTextFromUrl(url));
+function loadModuleFromUrl(url) {
+    return loadModuleFromSourceCode(getTextFromUrl());
 
-    function requireFromSourceCode(sourceCode) {
+    function loadModuleFromSourceCode(sourceCode) {
         const module = {exports: {}};
         (new Function("module", "exports", sourceCode))(module, module.exports);
         return module.exports;
     }
-    function getTextFromUrl(url) {
+
+    function getTextFromUrl() {
         console.log("Loading text from URL: " + url);
         const request = new XMLHttpRequest();
         request.open("GET", url, false);
@@ -30,7 +31,7 @@ const tools = Object.freeze({
 const REPOSITORY  = "https://raw.githubusercontent.com/thepeoplescoder/trading-indicators-for-tradovate-and-ninjatrader";
 const BRANCH_ROOT = REPOSITORY + "/main";
 
-const WeightedAverage = requireFromUrl(BRANCH_ROOT + "/src/js/ThePeoplesCoder.Tool.WeightedAverage.js");
+const WeightedAverage = loadModuleFromUrl(BRANCH_ROOT + "/src/js/ThePeoplesCoder.Tool.WeightedAverage.js");
 
 class VWAP {
     init() {
