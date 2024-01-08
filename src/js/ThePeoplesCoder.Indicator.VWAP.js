@@ -22,7 +22,7 @@ const initializer = (() => {
         return MODULES[url];
     }
     function loadModuleFromSourceCode(sourceCode, url) {
-        const module  = {loadModuleFromSourceCode, getTextFromUrl, loadModuleFromUrl, url, exports: {}};
+        const module = {loadModuleFromSourceCode, getTextFromUrl, loadModuleFromUrl, url, exports: {}};
         (new Function("module", "exports", sourceCode))(module, module.exports);
         return module.exports;
     }
