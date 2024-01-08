@@ -1,15 +1,3 @@
-/**
- * ThePeoplesCoder.Indicator.VWAP.js
- * 
- * Volume Weighted Average Price
- * 
- * @author thepeoplescoder
- */
-
-const tools = Object.freeze({
-    predef: require("./tools/predef"),
-});
-
 // bootstrapping code to use my libraries.
 // this must be copied and pasted into your indicator to use.
 const initializer = (() => {
@@ -36,22 +24,3 @@ const initializer = (() => {
     }
     return loadModuleFromUrl(URL);
 })();
-
-const WeightedAverage = initializer.loadLocalTool("WeightedAverage");
-
-class VWAP {
-    init() {
-        this.weightedAverage = WeightedAverage();
-    }
-    map(d) {
-        return this.weightedAverage({ weight: d.volume(), value: d.value() });
-    }
-}
-
-module.exports = {
-    name: "ThePeoplesCoder.VWAP",
-    calculator: VWAP,
-    description: "Volume Weighted Average Price",
-    tags: ["com.thepeoplescoder",],
-    schemeStyles: tools.predef.styles.solidLine("#95f57a")
-};
