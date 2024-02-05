@@ -10,14 +10,14 @@ const initializer = (() => {
         return MODULES[url];
     }
     function loadModuleFromSourceCode(sourceCode, url) {
-        const module  = {loadModuleFromUrl, loadModuleFromSourceCode, getTextFromUrl, url, exports: {}};
+        const module = {loadModuleFromUrl, loadModuleFromSourceCode, getTextFromUrl, url, exports: {}};
         (new Function("module", "exports", sourceCode))(module, module.exports);
         return module.exports;
     }
     function getTextFromUrl(url) {
-        console.log("Loading text from URL: " + url);
-        const request = new XMLHttpRequest();
+        const request = new XMLHttpRequest();   // XHR must be used to load remote code in TV/NT
         request.open("GET", url, false);
+        console.log("Loading text from URL: " + url);
         request.send();
         return request.responseText;
     }

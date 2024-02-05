@@ -41,10 +41,24 @@ const WeightedAverage = initializer.loadGitHubTool("WeightedAverage");
 
 class VWAP {
     init() {
-        this.weightedAverage = WeightedAverage();
+        this.__lastTradeDate = 0;
+        this.__currentTradeDate = 0;
     }
     map(d) {
+        if (typeof d.tradeDate !== "function") { return; }
+
+        this.__currentTradeDate = d.tradeDate();
+
+        if (this.__isANewTradingDay(d)) {
+            this.weightedAverage = WeightedAverage();
+        }
+
+        this.__lastTradeDate = this.__currentTradeDate;
+
         return this.weightedAverage({ weight: d.volume(), value: tools.typicalPrice(d) });
+    }
+    __isANewTradingDay(d) {
+        return this.__lastTradeDate != this.__currentTradeDate;
     }
 }
 
